@@ -12,10 +12,12 @@ public class Projectile : MonoBehaviour
     Transform target;
     float aimOffset;
 
-    public void Launch(Vector3 dir, Transform t, float offset) {
+    public void Launch(Vector3 dir, Transform t, float offset, float projectileSpeed, int dmg) {
         direction = dir;
         target = t;
         aimOffset = offset;
+        speed = projectileSpeed;
+        damage = dmg;
         Destroy(gameObject, lifetime);
     }
 
@@ -28,6 +30,15 @@ public class Projectile : MonoBehaviour
 
         // Distance-based hit check: no colliders, tags or Rigidbody needed
         foreach (var e in Enemy.All) {
+            Vector3 center = e.transform.position + Vector3.up * aimOffset;
+            if (Vector3.Distance(transform.position, center) <= hitRadius) {
+                e.TakeDamage(damage);
+                Destroy(gameObject);
+                return;
+            }
+        }
+
+        foreach (var e in Big_Enemy.All) {
             Vector3 center = e.transform.position + Vector3.up * aimOffset;
             if (Vector3.Distance(transform.position, center) <= hitRadius) {
                 e.TakeDamage(damage);

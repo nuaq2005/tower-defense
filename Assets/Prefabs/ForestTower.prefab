@@ -256,6 +256,37 @@ Transform:
   - {fileID: 3878949352461243367}
   m_Father: {fileID: 4291582946289491197}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2034569633670694638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8698182546075934885}
+  m_Layer: 0
+  m_Name: firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8698182546075934885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034569633670694638}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.4, y: 3.11, z: -0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4416497927062915357}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2261516741914556685
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,7 +653,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3873597176048796127}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.11877, y: 0.5, z: -11.03584}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -634,6 +665,7 @@ Transform:
   - {fileID: 2134372580060609257}
   - {fileID: 4291582946289491197}
   - {fileID: 4697826887994928076}
+  - {fileID: 8698182546075934885}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3958410827055947799
@@ -708,9 +740,11 @@ MonoBehaviour:
   range: 8
   fireRate: 1
   projectilePrefab: {fileID: 2103428285267317282, guid: eab4cfd872419cf4292128814b0af7b0, type: 3}
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 8698182546075934885}
   head: {fileID: 0}
   aimHeightOffset: 0.5
+  projectileSpeed: 12
+  heightScale: 1
 --- !u!1 &3880371892450913520
 GameObject:
   m_ObjectHideFlags: 0

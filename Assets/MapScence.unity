@@ -349,11 +349,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ee17e55a0fb4c4ba9b0809aa73203b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  towerPrefab: {fileID: 3873597176048796127, guid: f6168dd025f53e14dbbc3c3a4b0ca8cb, type: 3}
+  towerPrefab:
+  - {fileID: 3873597176048796127, guid: f6168dd025f53e14dbbc3c3a4b0ca8cb, type: 3}
+  - {fileID: 1591738991017785298, guid: 238132f4fdb7fc2488f21aa326459aed, type: 3}
+  towerNames:
+  - Tower
+  - Castle
   mapMask:
     serializedVersion: 2
     m_Bits: 8
   cam: {fileID: 896665771}
+  instructionText: {fileID: 0}
 --- !u!114 &466499306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,8 +373,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   enemyPrefab: {fileID: 238705504820909589, guid: 5604ecb269cb4cd4ab04e1ac5beda8e3, type: 3}
+  bigEnemyPrefab: {fileID: 4732515933147510497, guid: 40a2112a06a1f7245b2913e4edbdb50a, type: 3}
   path: {fileID: 1916187884}
   spawnInterval: 3
+  enemiesPerWave: 10
 --- !u!114 &466499307
 MonoBehaviour:
   m_ObjectHideFlags: 0

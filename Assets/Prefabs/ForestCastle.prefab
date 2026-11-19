@@ -467,6 +467,7 @@ GameObject:
   - component: {fileID: 325807378315005310}
   - component: {fileID: 4101846810004009304}
   - component: {fileID: 6482371248062522675}
+  - component: {fileID: -8873764807818982856}
   m_Layer: 0
   m_Name: ForestCastle
   m_TagString: Untagged
@@ -482,7 +483,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1591738991017785298}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0.0000002533197}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -18.778568, y: 0.5, z: 9.06117}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -499,8 +500,9 @@ Transform:
   - {fileID: 5758845646591804745}
   - {fileID: 1294176570966615457}
   - {fileID: 3930234710223187421}
+  - {fileID: 6632843918714205692}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &4101846810004009304
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -558,6 +560,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-8873764807818982856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591738991017785298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1300ba2201f2b5f48aca75ce085cbc2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  range: 8
+  fireRate: 1
+  projectilePrefab: {fileID: 2103428285267317282, guid: eab4cfd872419cf4292128814b0af7b0, type: 3}
+  firePoint: {fileID: 6632843918714205692}
+  head: {fileID: 0}
+  aimHeightOffset: 0.5
+  projectileSpeed: 20
+  damage: 3
+  heightScale: 1
 --- !u!1 &1681227387021487866
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,6 +1499,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4684630450583810938
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6632843918714205692}
+  m_Layer: 0
+  m_Name: firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6632843918714205692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4684630450583810938}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.2, y: 5.07, z: -0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 325807378315005310}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4802488411592831687
 GameObject:
   m_ObjectHideFlags: 0
