@@ -8,14 +8,14 @@
 - [x] The game ends when an enemy completes its path of travel without being destroyed.
 
 ### Minimum for a B grade:
-- []  There are at least two types of towers with different stats (rate of fire, projectile speed,
+- [x]  There are at least two types of towers with different stats (rate of fire, projectile speed,
 and tower height).
 - [] A textual overlay clearly conveys how to place towers.
 - [x] Players have a limited number of towers that can be placed.
 - [x] Enemy paths are not straight lines.
 
 ### Minimum for an A grade:
-- [] There are multiple enemy types with different statistics (speed and hp).
+- [x] There are multiple enemy types with different statistics (speed and hp).
 - [x]  The game includes non-basic assets.
 - [] Towers aim toward the predicted location of the target based on its current velocity and
 location.
