@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject gameOverPanel;
     public TMP_Text hudText;         // optional
-    public int lives = 3;
+    public int lives = 1;
     public int maxTowers = 5;
     public bool gameOver;
 
