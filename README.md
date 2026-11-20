@@ -17,7 +17,7 @@ and tower height).
 ### Minimum for an A grade:
 - [x] There are multiple enemy types with different statistics (speed and hp).
 - [x]  The game includes non-basic assets.
-- [] Towers aim toward the predicted location of the target based on its current velocity and
+- [x] Towers aim toward the predicted location of the target based on its current velocity and
 location.
 
 ### For an A+ grade:
