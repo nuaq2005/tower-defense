@@ -6,7 +6,6 @@ public class Tower : MonoBehaviour
     public float fireRate = 1f;
     public GameObject projectilePrefab;
     public Transform firePoint;
-    public Transform head;                // optional: only this part rotates
     public float aimHeightOffset = 0.5f;
     public float projectileSpeed = 12f;
     public int damage = 1;                // how much damage each projectile does
@@ -22,23 +21,24 @@ public class Tower : MonoBehaviour
         cooldown -= Time.deltaTime;
 
         Transform target = null;
+        Vector3 targetVel = Vector3.zero;
 
         Enemy smallTarget = FindTarget();
         Big_Enemy bigTarget = FindBigTarget();
 
-        if (smallTarget != null) target = smallTarget.transform;
-        if (bigTarget != null)   target = bigTarget.transform;   // big enemy takes priority
+        if (smallTarget != null) { target = smallTarget.transform; targetVel = smallTarget.Velocity; }
+        if (bigTarget != null)   { target = bigTarget.transform;   targetVel = bigTarget.Velocity; }   // big enemy takes priority
 
         if (target == null) return;
 
         Transform origin = firePoint != null ? firePoint : transform;
-        Vector3 aimPoint = target.position + Vector3.up * aimHeightOffset;
 
-        if (head != null) {
-            Vector3 toTarget = aimPoint - head.position;
-            if (toTarget.sqrMagnitude > 0.001f)
-                head.rotation = Quaternion.LookRotation(toTarget);
-        }
+        // Predicted intercept point based on the target's current position and velocity
+        Vector3 aimPoint = PredictAimPoint(origin.position,
+                                           target.position + Vector3.up * aimHeightOffset,
+                                           targetVel,
+                                           projectileSpeed);
+
 
         if (cooldown <= 0f) {
             Vector3 dir = (aimPoint - origin.position).normalized;
@@ -48,6 +48,30 @@ public class Tower : MonoBehaviour
         }
     }
 
+    // Finds where a projectile fired from 'origin' at 'projSpeed' will meet a target
+    // at 'targetPos' moving with 'targetVel'. Falls back to the current position if
+    // no intercept is possible.
+    Vector3 PredictAimPoint(Vector3 origin, Vector3 targetPos, Vector3 targetVel, float projSpeed) {
+        Vector3 d = targetPos - origin;
+        float a = Vector3.Dot(targetVel, targetVel) - projSpeed * projSpeed;
+        float b = 2f * Vector3.Dot(d, targetVel);
+        float c = Vector3.Dot(d, d);
+
+        float t;
+        if (Mathf.Abs(a) < 0.0001f) {
+            if (Mathf.Abs(b) < 0.0001f) return targetPos;
+            t = -c / b;
+        } else {
+            float disc = b * b - 4f * a * c;
+            if (disc < 0f) return targetPos;          // no intercept possible
+            float sq = Mathf.Sqrt(disc);
+            float t1 = (-b - sq) / (2f * a);
+            float t2 = (-b + sq) / (2f * a);
+            t = Mathf.Min(t1 > 0f ? t1 : float.MaxValue, t2 > 0f ? t2 : float.MaxValue);
+        }
+        if (t <= 0f || t == float.MaxValue) return targetPos;
+        return targetPos + targetVel * t;
+    }
 
     Enemy FindTarget() {
         Enemy best = null;

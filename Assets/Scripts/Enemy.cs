@@ -13,6 +13,8 @@ public class Enemy : MonoBehaviour
     float length;
     float distance;
 
+    public Vector3 Velocity => transform.forward * speed;
+
     public void Init(SplineContainer p) {
         path = p;
         length = path.CalculateLength();
