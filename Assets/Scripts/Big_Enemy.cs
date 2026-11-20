@@ -6,7 +6,7 @@ public class Big_Enemy : MonoBehaviour
 {
     public static List<Big_Enemy> All = new List<Big_Enemy>();
 
-    public float speed = 4f;
+    public float speed = 20f;
     public int hp = 6;
 
     SplineContainer path;
