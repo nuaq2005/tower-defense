@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Splines;
+using UnityEngine.EventSystems;
 
 public class TowerPlacer : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class TowerPlacer : MonoBehaviour
     [Header("Placement rules")]
     public SplineContainer path;          // same spline the EnemySpawner uses
     public float pathClearance = 1.5f;    // min distance from the path
-    public float minTowerSpacing = 1.5f;  // min distance between towers
+    public float minTowerSpacing = 3f;  // min distance between towers
 
     [Header("Placement ghost")]
     public Material ghostMaterial;       
@@ -40,20 +41,15 @@ public class TowerPlacer : MonoBehaviour
         }
         if (Mouse.current == null || Keyboard.current == null || cam == null) return;
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) { 
-            selected = 0; 
-            RebuildGhost(); 
-            UpdateText(); 
-        }
+        if (Keyboard.current.digit1Key.wasPressedThisFrame) SelectTower(0);
         
-        if (Keyboard.current.digit2Key.wasPressedThisFrame && towerPrefab.Length > 1) {
-            selected = 1;
-            RebuildGhost();
-            UpdateText(); 
-        }
+        if (Keyboard.current.digit2Key.wasPressedThisFrame) SelectTower(1);
+
+        bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
 
         Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-        bool onMap = Physics.Raycast(ray, out RaycastHit hit, 500f, mapMask);
+        RaycastHit hit = default;
+        bool onMap = !overUI && Physics.Raycast(ray, out hit, 500f, mapMask);
 
         if (ghost != null) {
             ghost.SetActive(onMap);
@@ -79,8 +75,7 @@ public class TowerPlacer : MonoBehaviour
     void UpdateText() {
         if (instructionText == null) return;
         string name = selected < towerNames.Length ? towerNames[selected] : "Tower";
-        instructionText.text =
-            $"Press 1 or 2 to choose a tower\nLeft-click the map to place it\nSelected: {name}\nTowers left: {GameManager.Instance.TowersRemaining}";
+        instructionText.text = $"Click a tower button below to choose one\nLeft-click the map to place it\nGreen = valid, red = blocked\nSelected: {name}\nTowers left: {GameManager.Instance.TowersRemaining}";
     }
 
     bool IsValidPlacement(Vector3 point) {
@@ -124,6 +119,13 @@ public class TowerPlacer : MonoBehaviour
 
         ghost.SetActive(false);
 
+    }
+
+    public void SelectTower(int index) {
+        if (index < 0 || index >= towerPrefab.Length) return;
+        selected = index;
+        RebuildGhost();
+        UpdateText();
     }
 
 }
