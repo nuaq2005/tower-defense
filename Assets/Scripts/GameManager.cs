@@ -42,6 +42,6 @@ public class GameManager : MonoBehaviour
 
     void UpdateHUD() {
         if (hudText)
-            hudText.text = $"Lives: {Mathf.Max(lives, 0)}\nTowers left: {TowersRemaining}";
+            hudText.text = $"Game Over!";
     }
 }

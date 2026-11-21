@@ -1,5 +1,14 @@
 ## Current Requirements Completed:
 
+## Demo Functionalities
+
+<img src = "tower-defense-functions.gif"/>
+
+## Game Over 
+
+<img src = "tower-defense-gameover.gif"/>
+
+
 ### Minimum for a C grade:
 - [x] The player can place towers.
 - [x] Towers fire continuously at a set rate.
@@ -19,6 +28,3 @@ and tower height).
 - [x]  The game includes non-basic assets.
 - [x] Towers aim toward the predicted location of the target based on its current velocity and
 location.
-
-### For an A+ grade:
-- [] Above and beyond!
