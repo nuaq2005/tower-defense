@@ -10,7 +10,7 @@
 ### Minimum for a B grade:
 - [x]  There are at least two types of towers with different stats (rate of fire, projectile speed,
 and tower height).
-- [] A textual overlay clearly conveys how to place towers.
+- [x] A textual overlay clearly conveys how to place towers.
 - [x] Players have a limited number of towers that can be placed.
 - [x] Enemy paths are not straight lines.
 
