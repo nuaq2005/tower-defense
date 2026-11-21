@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Splines;
 
 public class TowerPlacer : MonoBehaviour
 {
@@ -9,26 +12,67 @@ public class TowerPlacer : MonoBehaviour
     public Camera cam;
     public TMPro.TextMeshProUGUI instructionText;
 
+    [Header("Placement rules")]
+    public SplineContainer path;          // same spline the EnemySpawner uses
+    public float pathClearance = 1.5f;    // min distance from the path
+    public float minTowerSpacing = 1.5f;  // min distance between towers
+
+    [Header("Placement ghost")]
+    public Material ghostMaterial;       
+    public Color validColor = new Color(0f, 1f, 0f, 0.5f);
+    public Color invalidColor = new Color(1f, 0f, 0f, 0.5f);
+
     int selected = 0;
+    GameObject ghost;
+    Material ghostMat;
+    readonly List<Vector3> placed = new List<Vector3>();
+
     void Start() { 
         if (cam == null) cam = Camera.main; 
+        RebuildGhost();
         UpdateText();
     }
 
     void Update() {
-        if (GameManager.Instance.gameOver) return;
+        if (GameManager.Instance.gameOver) {
+            if (ghost) ghost.SetActive(false);
+            return;
+        }
         if (Mouse.current == null || Keyboard.current == null || cam == null) return;
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) { selected = 0; UpdateText(); }
-        if (Keyboard.current.digit2Key.wasPressedThisFrame && towerPrefab.Length > 1) { selected = 1; UpdateText(); }
+        if (Keyboard.current.digit1Key.wasPressedThisFrame) { 
+            selected = 0; 
+            RebuildGhost(); 
+            UpdateText(); 
+        }
+        
+        if (Keyboard.current.digit2Key.wasPressedThisFrame && towerPrefab.Length > 1) {
+            selected = 1;
+            RebuildGhost();
+            UpdateText(); 
+        }
 
-        if (Mouse.current.leftButton.wasPressedThisFrame) {
-            Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (Physics.Raycast(ray, out RaycastHit hit, 500f, mapMask)) {
-                if (GameManager.Instance.TryUseTower())
-                    Instantiate(towerPrefab[selected], hit.point, Quaternion.identity);
-                else
-                    Debug.Log("No towers left!");
+        Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+        bool onMap = Physics.Raycast(ray, out RaycastHit hit, 500f, mapMask);
+
+        if (ghost != null) {
+            ghost.SetActive(onMap);
+            if (onMap) {
+                ghost.transform.position = hit.point;
+                ghostMat.color = IsValidPlacement(hit.point) ? validColor : invalidColor;
+            }
+    }
+
+        if (onMap && Mouse.current.leftButton.wasPressedThisFrame) {
+            if (!IsValidPlacement(hit.point)) {
+                Debug.Log("Can't place a tower here!");
+                return;
+            }
+            if (GameManager.Instance.TryUseTower()) {
+                Instantiate(towerPrefab[selected], hit.point, Quaternion.identity);
+                placed.Add(hit.point);
+            } else {
+                Debug.Log("No towers left!");
             }
         }
     }
@@ -38,4 +82,48 @@ public class TowerPlacer : MonoBehaviour
         instructionText.text =
             $"Press 1 or 2 to choose a tower\nLeft-click the map to place it\nSelected: {name}\nTowers left: {GameManager.Instance.TowersRemaining}";
     }
+
+    bool IsValidPlacement(Vector3 point) {
+        // Too close to the path?
+        if (path != null) {
+            // GetNearestPoint works in the spline's local space
+            float3 local = path.transform.InverseTransformPoint(point);
+            SplineUtility.GetNearestPoint(path.Spline, local, out float3 nearestLocal, out float _);
+            Vector3 nearestWorld = path.transform.TransformPoint(nearestLocal);
+            if (Vector3.Distance(point, nearestWorld) < pathClearance) return false;
+        }
+
+        // Too close to another tower
+        foreach (var p in placed) {
+            if (Vector3.Distance(point, p) < minTowerSpacing) return false;
+        }
+
+        return true;
+    }
+
+    void RebuildGhost() {
+        if (ghost != null) Destroy(ghost);
+        if (ghostMaterial == null) return;
+
+        ghost = Instantiate(towerPrefab[selected]);
+
+        // Stop the ghost from shooting, targeting, etc.
+        foreach (var mb in ghost.GetComponentsInChildren<MonoBehaviour>()) mb.enabled = false;
+
+        // Colliders would interfere with raycasts
+        foreach (var c in ghost.GetComponentsInChildren<Collider>()) Destroy(c);
+
+        // Swap every material for one shared translucent material
+        ghostMat = new Material(ghostMaterial);
+        foreach (var r in ghost.GetComponentsInChildren<Renderer>()) {
+            var mats = new Material[r.sharedMaterials.Length];
+            for (int i = 0; i < mats.Length; i++) mats[i] = ghostMat;
+            r.sharedMaterials = mats;
+            r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
+
+        ghost.SetActive(false);
+
+    }
+
 }
